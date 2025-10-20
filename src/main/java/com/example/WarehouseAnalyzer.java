@@ -30,7 +30,7 @@ class WarehouseAnalyzer {
     public List<Product> findProductsInPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
         List<Product> result = new ArrayList<>();
         for (Product p : warehouse.getProducts()) {
-            BigDecimal price = p.price();
+            BigDecimal price = p.getPrice();
             if (price.compareTo(minPrice) >= 0 && price.compareTo(maxPrice) <= 0) {
                 result.add(p);
             }
