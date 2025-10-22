@@ -107,7 +107,7 @@ class BasicTest {
 
         @BeforeEach
         void setUp() {
-            warehouse = Warehouse.getInstance("TestWarehouse");
+            warehouse = Warehouse.getInstance();
             warehouse.clearProducts(); // Ensures test isolation
         }
 
@@ -144,8 +144,8 @@ class BasicTest {
             @Test
             @DisplayName("✅ should return the same instance for the same name")
             void should_returnSameInstance_when_nameIsIdentical() {
-                Warehouse warehouse1 = Warehouse.getInstance("GlobalStore");
-                Warehouse warehouse2 = Warehouse.getInstance("GlobalStore");
+                Warehouse warehouse1 = Warehouse.getInstance();
+                Warehouse warehouse2 = Warehouse.getInstance();
                 assertThat(warehouse1)
                         .as("Warehouses with the same name should be the same singleton instance.")
                         .isSameAs(warehouse2);

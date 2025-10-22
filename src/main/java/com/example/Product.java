@@ -27,7 +27,7 @@ public abstract class Product {
         this.price = price;
     }
 
-    public UUID id() {
+    public UUID uuid() {
         return id;
     }
 

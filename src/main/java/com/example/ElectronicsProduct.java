@@ -13,28 +13,22 @@ import java.util.UUID;
 public class ElectronicsProduct extends Product implements Shippable{
 
     private int warrantyMonths;
-    private BigDecimal weight;
+    private final BigDecimal weight;
 
     public ElectronicsProduct(UUID id, String name, Category category, BigDecimal price, int warrantyMonths, BigDecimal weight) {
         super(id, name, category, price);
+
+        if (warrantyMonths < 0) { throw new IllegalArgumentException("Warranty months cannot be negative."); }
+        if (price.compareTo(BigDecimal.ZERO) < 0) { throw new IllegalArgumentException("Price cannot be negative."); }
+        if (weight.compareTo(BigDecimal.ZERO) < 0) { throw new IllegalArgumentException("Weight cannot be negative."); }
+
         this.warrantyMonths = warrantyMonths;
         this.weight = weight;
 
-        if (this.warrantyMonths < 0) {
-            throw new IllegalArgumentException("Warranty months cannot be negative.");
-        }
-
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Price cannot be negative.");
-        }
-
-        if (weight.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Weight cannot be negative.");
-        }
     }
 
     public int warrantyMonths() {
-        return warrantyMonths;
+        return this.warrantyMonths;
     }
 
     @Override
@@ -44,11 +38,15 @@ public class ElectronicsProduct extends Product implements Shippable{
 
     @Override
     public BigDecimal calculateShippingCost() {
-        return null;
+        BigDecimal cost = BigDecimal.valueOf(79);
+        if (weight.compareTo(BigDecimal.valueOf(5.0)) > 0) {
+            cost = cost.add(BigDecimal.valueOf(49));
+        }
+        return cost;
     }
 
     @Override
     public double weight() {
-        return weight.doubleValue();
+        return this.weight.doubleValue(); // Konvertera BigDecimal till double
     }
 }
