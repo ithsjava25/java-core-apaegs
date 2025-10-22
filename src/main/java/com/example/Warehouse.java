@@ -18,12 +18,8 @@ import java.util.stream.Collectors;
 
 public class Warehouse {
 
-    // Static för singleton pattern
-//    private static Map<String, Warehouse> instances = new HashMap<>();
-
     private static Warehouse instance; // en global instans
 
-    // Instance fields
     private String name;
     private Map<UUID, Product> products = new HashMap<>();
     private Map<UUID, Product> instances = new HashMap<>();
@@ -35,9 +31,17 @@ public class Warehouse {
     }
 
     // Factory
+    public static Warehouse getInstance(String name) {
+        if (instance == null) {
+            instance = new Warehouse(name);
+        }
+        return instance;
+    }
+
+    // Factory utan parameter
     public static Warehouse getInstance() {
         if (instance == null) {
-            instance = new Warehouse("name");
+            instance = new Warehouse("Kata");
         }
         return instance;
     }
@@ -53,10 +57,19 @@ public class Warehouse {
         return true;
     }
 
-    public void addProduct(Product product){
-        if (product == null) throw new IllegalArgumentException("Product cannot be null.");
+    public void addProduct(Product product) {
+        if (product == null)
+            throw new IllegalArgumentException("Product cannot be null.");
+
+        if (products.containsKey(product.uuid())) {
+            throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
+        }
+
         products.put(product.uuid(), product);
     }
+
+    public String name() { return name; }
+
 
     public List<Product> getProducts() {
         return Collections.unmodifiableList(new ArrayList<>(products.values()));
@@ -67,8 +80,12 @@ public class Warehouse {
     }
 
 
-    public void updateProductPrice(UUID uuid, BigDecimal newPrice) {}
+    public void updateProductPrice(UUID uuid, BigDecimal newPrice) {
+        if (products.get(uuid) == null)
+        { throw new NoSuchElementException("Product not found with id: " + uuid); }
+        products.get(uuid).setPrice(newPrice);
 
+    }
     public List<Perishable> expiredProducts() {
         return products.values().stream()
                 .filter(p -> p instanceof Perishable)

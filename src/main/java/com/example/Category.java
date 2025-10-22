@@ -3,11 +3,6 @@ package com.example;
 import java.util.HashMap;
 import java.util.Map;
 
-//    Use a private constructor and a public static factory Category.of(String name).
-//    Validate input: null => "Category name can't be null"; empty/blank => "Category name can't be blank".
-//    Normalize name with initial capital letter (e.g., "fruit" -> "Fruit").
-//    Cache/flyweight: return the same instance for the same normalized name.
-
 public class Category {
     private static final Map<String, Category> cache = new HashMap<>();
     private final String name;

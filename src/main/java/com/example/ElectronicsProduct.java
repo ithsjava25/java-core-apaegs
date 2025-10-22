@@ -1,13 +1,6 @@
 package com.example;
 
-//    Implements Shippable.
-//    Fields: int warrantyMonths, BigDecimal weight (kg).
-//    Validation: negative warranty -> IllegalArgumentException("Warranty months cannot be negative.").
-//    productDetails() should look like: "Electronics: Laptop, Warranty: 24 months".
-//    Shipping rule: base 79, add 49 if weight > 5.0 kg.
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 public class ElectronicsProduct extends Product implements Shippable{
