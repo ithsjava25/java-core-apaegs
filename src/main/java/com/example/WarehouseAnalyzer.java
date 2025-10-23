@@ -148,44 +148,44 @@ class WarehouseAnalyzer {
 
     public List<Product> findPriceOutliers(double standardDeviations) {
         List<Product> products = warehouse.getProducts();
-        int n = products.size();
-        if (n == 0) return List.of();
-        double sum = products.stream().map(Product::price).mapToDouble(bd -> bd.doubleValue()).sum();
-        double mean = sum / n;
-        double variance = products.stream()
+        if (products.isEmpty()) return List.of();
+
+        List<BigDecimal> prices = products.stream()
                 .map(Product::price)
-                .mapToDouble(bd -> Math.pow(bd.doubleValue() - mean, 2))
-                .sum() / n;
-        double std = Math.sqrt(variance);
-        double threshold = standardDeviations * std;
-        List<Product> outliers = new ArrayList<>();
-        for (Product p : products) {
-            double diff = Math.abs(p.price().doubleValue() - mean);
-            if (diff > threshold) outliers.add(p);
+                .sorted()
+                .toList();
+
+        BigDecimal q1 = quartile(0.25, prices);
+        BigDecimal q3 = quartile(0.75, prices);
+
+        BigDecimal iqr = q3.subtract(q1);
+        BigDecimal boundDistance = iqr.multiply(BigDecimal.valueOf(standardDeviations));
+        BigDecimal lowerBound = q1.subtract(boundDistance);
+        BigDecimal upperBound = q3.add(boundDistance);
+
+        return products.stream()
+                .filter(p -> p.price().compareTo(lowerBound) < 0 || p.price().compareTo(upperBound) > 0)
+                .toList();
+    }
+
+    private static BigDecimal quartile(double percentile, List<BigDecimal> sortedList) {
+        double index = percentile * (sortedList.size() - 1);
+        int lower = (int) Math.floor(index);
+        int upper = (int) Math.ceil(index);
+
+        if (lower == upper) {
+            return sortedList.get(lower);
         }
-        return outliers;
+
+        BigDecimal lowerValue = sortedList.get(lower);
+        BigDecimal upperValue = sortedList.get(upper);
+        BigDecimal diff = upperValue.subtract(lowerValue);
+        BigDecimal weight = BigDecimal.valueOf(index - lower);
+
+        return lowerValue.add(diff.multiply(weight));
     }
 
 
-//    public List<Product> findPriceOutliers(double standardDeviations) {
-//        List<Product> products = warehouse.getProducts();
-//        int n = products.size();
-//        if (n == 0) return List.of();
-//        double sum = products.stream().map(Product::price).mapToDouble(bd -> bd.doubleValue()).sum();
-//        double mean = sum / n;
-//        double variance = products.stream()
-//                .map(Product::price)
-//                .mapToDouble(bd -> Math.pow(bd.doubleValue() - mean, 2))
-//                .sum() / n;
-//        double std = Math.sqrt(variance);
-//        double threshold = standardDeviations * std;
-//        List<Product> outliers = new ArrayList<>();
-//        for (Product p : products) {
-//            double diff = Math.abs(p.price().doubleValue() - mean);
-//            if (diff > threshold) outliers.add(p);
-//        }
-//        return outliers;
-//    }
 
     /**
      * Groups all shippable products into ShippingGroup buckets such that each group's total weight
