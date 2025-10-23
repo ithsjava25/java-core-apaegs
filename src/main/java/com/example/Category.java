@@ -15,18 +15,11 @@ public class Category {
     // Factory method
     public static Category of(String name) {
         // Null check
-        if (name == null) {
-            throw new IllegalArgumentException("Category name can't be null");
-        }
-
+        if (name == null) { throw new IllegalArgumentException("Category name can't be null"); }
         // Empty check
-        if (name.isBlank()) {
-            throw new IllegalArgumentException("Category name can't be blank");
-        }
-
+        if (name.isBlank()) { throw new IllegalArgumentException("Category name can't be blank"); }
         // Normalize
         String normalized = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-
         // Flyweight pattern
         return cache.computeIfAbsent(normalized, Category::new);
     }

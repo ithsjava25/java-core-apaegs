@@ -1,28 +1,15 @@
 package com.example;
 
-
-//    getInstance(String name) returns the same instance per unique name.
-//    addProduct(Product): throw IllegalArgumentException("Product cannot be null.") if null.
-//    getProducts(): return an unmodifiable copy.
-//    getProductById(UUID): return Optional.
-//    updateProductPrice(UUID, BigDecimal): when not found,
-//    throw NoSuchElementException("Product not found with id: ").
-//    Also track changed products in getChangedProducts().
-//    expiredProducts(): return List that are expired.
-//    shippableProducts(): return List from stored products.
-//    remove(UUID): remove the matching product if present.
-
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Warehouse {
 
-    private static Warehouse instance; // en global instans
+    private static Warehouse instance;
 
     private String name;
     private Map<UUID, Product> products = new HashMap<>();
-    private Map<UUID, Product> instances = new HashMap<>();
     private Set<Product> changedProducts = new HashSet<>();
 
     // Singleton
@@ -30,15 +17,8 @@ public class Warehouse {
         this.name = name;
     }
 
-    // Factory
-    public static Warehouse getInstance(String name) {
-        if (instance == null) {
-            instance = new Warehouse(name);
-        }
-        return instance;
-    }
 
-    // Factory utan parameter
+    // Factory
     public static Warehouse getInstance() {
         if (instance == null) {
             instance = new Warehouse("Kata");
@@ -46,30 +26,24 @@ public class Warehouse {
         return instance;
     }
 
+    public String name() { return name; }
+
     public void clearProducts() {
         products.clear();
         changedProducts.clear();
     }
+
     public boolean isEmpty() {
-        if (products == null) {
-            return false;
-        }
-        return true;
+        return products.isEmpty();
     }
 
     public void addProduct(Product product) {
-        if (product == null)
-            throw new IllegalArgumentException("Product cannot be null.");
-
-        if (products.containsKey(product.uuid())) {
-            throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
-        }
+        if (product == null) { throw new IllegalArgumentException("Product cannot be null."); }
+        if (products.containsKey(product.uuid()))
+            { throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates."); }
 
         products.put(product.uuid(), product);
     }
-
-    public String name() { return name; }
-
 
     public List<Product> getProducts() {
         return Collections.unmodifiableList(new ArrayList<>(products.values()));
@@ -79,13 +53,13 @@ public class Warehouse {
         return Optional.ofNullable(products.get(id));
     }
 
-
     public void updateProductPrice(UUID uuid, BigDecimal newPrice) {
-        if (products.get(uuid) == null)
-        { throw new NoSuchElementException("Product not found with id: " + uuid); }
+        if (products.get(uuid) == null)  { throw new NoSuchElementException("Product not found with id: " + uuid); }
         products.get(uuid).setPrice(newPrice);
+        changedProducts.add(products.get(uuid));
 
     }
+
     public List<Perishable> expiredProducts() {
         return products.values().stream()
                 .filter(p -> p instanceof Perishable)
@@ -106,10 +80,7 @@ public class Warehouse {
     }
 
     public Map<Category, List<Product>> getProductsGroupedByCategories() {
-        if (products.isEmpty()) {
-            return new HashMap<>();
-        }
-
+        if (products.isEmpty()) { return new HashMap<>(); }
         return products.values().stream()
                 .collect(Collectors.groupingBy(Product::category));
     }
