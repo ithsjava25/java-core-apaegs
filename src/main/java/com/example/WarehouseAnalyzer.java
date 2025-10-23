@@ -145,6 +145,7 @@ class WarehouseAnalyzer {
      * @param standardDeviations threshold in standard deviations (e.g., 2.0)
      * @return list of products considered outliers
      */
+
     public List<Product> findPriceOutliers(double standardDeviations) {
         List<Product> products = warehouse.getProducts();
         int n = products.size();
@@ -164,6 +165,27 @@ class WarehouseAnalyzer {
         }
         return outliers;
     }
+
+
+//    public List<Product> findPriceOutliers(double standardDeviations) {
+//        List<Product> products = warehouse.getProducts();
+//        int n = products.size();
+//        if (n == 0) return List.of();
+//        double sum = products.stream().map(Product::price).mapToDouble(bd -> bd.doubleValue()).sum();
+//        double mean = sum / n;
+//        double variance = products.stream()
+//                .map(Product::price)
+//                .mapToDouble(bd -> Math.pow(bd.doubleValue() - mean, 2))
+//                .sum() / n;
+//        double std = Math.sqrt(variance);
+//        double threshold = standardDeviations * std;
+//        List<Product> outliers = new ArrayList<>();
+//        for (Product p : products) {
+//            double diff = Math.abs(p.price().doubleValue() - mean);
+//            if (diff > threshold) outliers.add(p);
+//        }
+//        return outliers;
+//    }
 
     /**
      * Groups all shippable products into ShippingGroup buckets such that each group's total weight
