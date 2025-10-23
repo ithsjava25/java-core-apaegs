@@ -72,7 +72,7 @@ public class Warehouse {
         return products.values().stream()
                 .filter(p -> p instanceof Shippable)
                 .map(p -> (Shippable) p)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public void remove(UUID uuid) {

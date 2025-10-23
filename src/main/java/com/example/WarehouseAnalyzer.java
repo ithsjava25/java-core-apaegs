@@ -185,8 +185,6 @@ class WarehouseAnalyzer {
         return lowerValue.add(diff.multiply(weight));
     }
 
-
-
     /**
      * Groups all shippable products into ShippingGroup buckets such that each group's total weight
      * does not exceed the provided maximum. The goal is to minimize the number of groups and/or total
