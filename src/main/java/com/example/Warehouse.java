@@ -63,6 +63,10 @@ public class Warehouse {
 
     }
 
+    public Set<Product> getChangedProducts() {
+        return Collections.unmodifiableSet(changedProducts);
+    }
+
     public List<Perishable> expiredProducts() {
         return products.values().stream()
                 .filter(p -> p instanceof Perishable)
