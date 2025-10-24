@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 public class Warehouse {
 
     private static Warehouse instance;
+    private static Map<String, Warehouse> instances = new HashMap<>();
 
     private String name;
     private Map<UUID, Product> products = new HashMap<>();
@@ -18,12 +19,14 @@ public class Warehouse {
     }
 
 
-    // Factory
+    // Factory without parameter
     public static Warehouse getInstance() {
-        if (instance == null) {
-            instance = new Warehouse("Kata");
-        }
-        return instance;
+        return getInstance("Kata");
+    }
+
+    // Factory
+    public static Warehouse getInstance(String name) {
+        return instances.computeIfAbsent(name, Warehouse::new);
     }
 
     public String name() { return name; }
