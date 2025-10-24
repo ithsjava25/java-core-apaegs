@@ -63,6 +63,7 @@ public class Warehouse {
 
     }
 
+
     public Set<Product> getChangedProducts() {
         return Collections.unmodifiableSet(changedProducts);
     }
