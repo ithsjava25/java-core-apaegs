@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class FoodProduct extends Product implements Perishable, Shippable{
 
-    LocalDate expirationDate;
-    BigDecimal weight;
+    private LocalDate expirationDate;
+    private BigDecimal weight;
 
     public FoodProduct(UUID id, String name, Category category, BigDecimal price, LocalDate expirationDate, BigDecimal weight) {
         super(id, name, category, price);

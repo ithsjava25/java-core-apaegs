@@ -1,7 +1,6 @@
 package com.example;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
@@ -138,11 +137,11 @@ class WarehouseAnalyzer {
     }
 
     /**
-     * Identifies products whose price deviates from the mean by more than the specified
-     * number of standard deviations. Uses population standard deviation over all products.
-     * Test expectation: with a mostly tight cluster and two extremes, calling with 2.0 returns the two extremes.
+     * Identifies price outliers using the Interquartile Range (IQR) method.
+     * Products outside (Q1 - k×IQR, Q3 + k×IQR) are considered outliers,
+     * where k is the standardDeviations parameter.
      *
-     * @param standardDeviations threshold in standard deviations (e.g., 2.0)
+     * @param standardDeviations IQR multiplier for outlier detection (e.g., 2.0)
      * @return list of products considered outliers
      */
 
