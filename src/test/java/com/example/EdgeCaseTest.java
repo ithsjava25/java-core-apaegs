@@ -26,7 +26,7 @@ class EdgeCaseTest {
      */
     @BeforeEach
     void setUp() {
-        warehouse = Warehouse.getInstance("AdvancedTestWarehouse");
+        warehouse = Warehouse.getInstance();
         warehouse.clearProducts();
         analyzer = new WarehouseAnalyzer(warehouse);
     }
