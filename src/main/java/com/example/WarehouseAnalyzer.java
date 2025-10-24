@@ -142,7 +142,7 @@ class WarehouseAnalyzer {
      * where k is the standardDeviations parameter.
      *
      * @param standardDeviations IQR multiplier for outlier detection (e.g., 2.0)
-     * @return list of products considered outliers
+     * @return list of products considered outliers.
      */
 
     public List<Product> findPriceOutliers(double standardDeviations) {
